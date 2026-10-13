@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: restaurante
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_URL}?createDatabaseIfNotExist=true
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+    database: mysql
+    show-sql: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+#jwt:
+#  secret: ${JWT_SECRET}
+#
+#springdoc:
+#  swagger-ui:
+#    path: /swagger
+#
+#  api-docs:
+#    path: /api-docs
