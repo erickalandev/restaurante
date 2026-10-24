@@ -2,6 +2,7 @@ package com.tech.challenge.fiap.gestao.restaurante.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.EnderecoDTO;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.UsuarioClienteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.enums.TipoUsuarioEnum;
 import jakarta.persistence.*;
 
@@ -59,6 +60,15 @@ public class Usuario implements Serializable {
         this.tipoUsuario = TipoUsuarioEnum.CLIENTE;
         this.enderecos = Endereco.popularEnderecos(enderecos, this, Boolean.FALSE);
         return this;
+    }
+
+    public void atualizarUsuario(UsuarioClienteDTO request) {
+        this.nome = request.nome();
+        this.cpf = request.cpf().replaceAll("\\D", "");
+        this.email = request.email();
+        this.contato = request.contato().replaceAll("\\D", "");
+        this.enderecos.clear();
+        this.enderecos.addAll(Endereco.popularEnderecos(request.enderecos(), this, Boolean.FALSE));
     }
 
     public Usuario vincularRestaurante(Restaurante restaurante) {

@@ -1,6 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.controller;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.CadastrarItensCardapioRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ItensCardapioRequest;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ItensCardapioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.service.ItensCardapioService;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class ItensCardapioController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Void> cadastrarItensCardapio(@RequestBody @Valid CadastrarItensCardapioRequest request) {
+    public ResponseEntity<Void> cadastrarItensCardapio(@RequestBody @Valid ItensCardapioRequest request) {
         itensCardapioService.cadastrarItensCardapio(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

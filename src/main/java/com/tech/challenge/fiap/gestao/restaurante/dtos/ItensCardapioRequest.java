@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Set;
 
-public record CadastrarItensCardapioRequest(
+public record ItensCardapioRequest(
 
         @NotBlank(message = "O nome do restaurante é obrigatório.")
         String nomeRestaurante,

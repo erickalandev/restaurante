@@ -6,6 +6,7 @@ import com.tech.challenge.fiap.gestao.restaurante.model.Restaurante;
 import java.util.List;
 
 public record ConsultarRestauranteResponse(
+        Long codigoRestaurante,
         String donoRestaurante,
         String nome,
         String tipoCozinha,
@@ -16,6 +17,7 @@ public record ConsultarRestauranteResponse(
 
     public static ConsultarRestauranteResponse toResponse(Restaurante restaurante) {
         return new ConsultarRestauranteResponse(
+                restaurante.getRestauranteId(),
                 restaurante.getDonoRestaurante().getNome(),
                 restaurante.getNome(),
                 restaurante.getTipoCozinha() == null ? null : restaurante.getTipoCozinha().name().toLowerCase(),

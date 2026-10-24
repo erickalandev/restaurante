@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -76,6 +77,20 @@ public class ExceptionControllerAdvice {
                 ));
     }
 
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException ex, HttpServletRequest request) {
+        FieldErrorDetail errorDetail = new FieldErrorDetail(ex.getHeaderName(), "Cabeçalho de requisição ausente.");
+
+        return ResponseEntity.badRequest()
+                .body(buildError(
+                        HttpStatus.BAD_REQUEST,
+                        "Missing request header",
+                        "Um ou mais cabeçalhos de requisição estão ausentes.",
+                        request.getRequestURI(),
+                        List.of(errorDetail)
+                ));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -88,8 +103,8 @@ public class ExceptionControllerAdvice {
                 ));
     }
 
-    @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ResponseEntity<ErrorResponse> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex, HttpServletRequest request) {
+    @ExceptionHandler(ObjetoNaoEncontrado.class)
+    public ResponseEntity<ErrorResponse> handleObjetoNaoEncontrado(ObjetoNaoEncontrado ex, HttpServletRequest request) {
         FieldErrorDetail errorDetail = new FieldErrorDetail("result", ex.getMessage() != null ? ex.getMessage() : "Dado não encontrado.");
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(buildError(
@@ -134,5 +149,21 @@ public class ExceptionControllerAdvice {
     private String resolveTraceId() {
         String traceId = MDC.get("traceId");
         return traceId != null ? traceId : UUID.randomUUID().toString();
+    }
+
+    public record ErrorResponse(
+            String traceId,
+            String title,
+            int status,
+            String detail,
+            String instance,
+            List<FieldErrorDetail> errors
+    ) {
+    }
+
+    public record FieldErrorDetail(
+            String field,
+            String message
+    ) {
     }
 }

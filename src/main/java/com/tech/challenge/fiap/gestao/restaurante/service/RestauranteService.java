@@ -1,11 +1,13 @@
 package com.tech.challenge.fiap.gestao.restaurante.service;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.CadastrarRestauranteRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteRequest;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteRequest;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteResponse;
 import com.tech.challenge.fiap.gestao.restaurante.enums.TipoCozinhaEnum;
+import com.tech.challenge.fiap.gestao.restaurante.exception.ObjetoNaoEncontrado;
 import com.tech.challenge.fiap.gestao.restaurante.model.Restaurante;
 import com.tech.challenge.fiap.gestao.restaurante.repository.RestauranteRepository;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,18 +35,29 @@ public class RestauranteService {
     }
 
     @Transactional
-    public void cadastrarRestaurante(CadastrarRestauranteRequest request) {
+    public Restaurante cadastrarRestaurante(RestauranteRequest request) {
         logger.info("Cadastrando restaurante: {}", request);
-        Restaurante restaurante = new Restaurante().popularRestaurante(request.nome(),
-                                                                         TipoCozinhaEnum.getValue(request.tipoCozinha()),
-                                                                         request.horarioFuncionamento(),
-                                                                         request.contato(),
-                                                                         request.enderecos(),
-                                                                         request.donoRestaurante());
-        restauranteRepository.save(restaurante);
+        Restaurante restaurante = new Restaurante().popularRestaurante(request);
+        return restauranteRepository.save(restaurante);
     }
 
     public Restaurante findByNomeAndDonoRestaurante(String nomeRestaurante, String donoRestaurante) {
         return restauranteRepository.findByNomeAndDonoRestaurante_Nome(nomeRestaurante, donoRestaurante);
+    }
+
+    @Transactional
+    public Restaurante atualizarRestaurante(Long codigoRestaurante, @Valid RestauranteRequest request) {
+        Restaurante restaurante = restauranteRepository.findById(codigoRestaurante)
+                .orElseThrow(() -> new ObjetoNaoEncontrado("Restaurante não encontrado com o código: " + codigoRestaurante));
+        restaurante.popularRestaurante(request);
+        return restauranteRepository.save(restaurante);
+    }
+
+    @Transactional
+    public void deletarRestaurante(Long codigoRestaurante) {
+        if (!restauranteRepository.existsById(codigoRestaurante)) {
+            throw new ObjetoNaoEncontrado("Restaurante não encontrado com o código: " + codigoRestaurante);
+        }
+        restauranteRepository.deleteById(codigoRestaurante);
     }
 }

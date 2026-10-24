@@ -1,10 +1,12 @@
 package com.tech.challenge.fiap.gestao.restaurante.controller;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.CadastrarRestauranteRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteRequest;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteRequest;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteResponse;
+import com.tech.challenge.fiap.gestao.restaurante.model.Restaurante;
 import com.tech.challenge.fiap.gestao.restaurante.service.RestauranteService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +29,22 @@ public class RestauranteController {
     }
 
     @PostMapping("/cadastrar")
-    public ResponseEntity<Void> cadastrarRestaurante(@RequestBody @Valid CadastrarRestauranteRequest request) {
-        restauranteService.cadastrarRestaurante(request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Restaurante> cadastrarRestaurante(@RequestBody @Valid RestauranteRequest request) {
+        Restaurante restaurante = restauranteService.cadastrarRestaurante(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
     }
 
+    @PutMapping("/atualizar")
+    public ResponseEntity<Restaurante> atualizarRestaurante(@RequestParam @NotNull(message = "O código do restaurante é obrigatório") Long codigoRestaurante,
+                                                            @RequestBody @Valid RestauranteRequest request) {
+        Restaurante restaurante = restauranteService.atualizarRestaurante(codigoRestaurante, request);
+        return ResponseEntity.status(HttpStatus.OK).body(restaurante);
+    }
 
+    @DeleteMapping("/deletar")
+    public ResponseEntity<Void> deletarRestaurante(@RequestParam @NotNull(message = "O código do restaurante é obrigatório") Long codigoRestaurante) {
+        restauranteService.deletarRestaurante(codigoRestaurante);
+        return ResponseEntity.noContent().build();
+    }
 
 }

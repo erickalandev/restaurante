@@ -1,6 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.service;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.CadastrarItensCardapioRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ItensCardapioRequest;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ItensCardapioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.model.ItensCardapio;
 import com.tech.challenge.fiap.gestao.restaurante.model.Restaurante;
@@ -25,7 +25,7 @@ public class ItensCardapioService {
     }
 
     @Transactional
-    public void cadastrarItensCardapio(@Valid CadastrarItensCardapioRequest request) {
+    public void cadastrarItensCardapio(@Valid ItensCardapioRequest request) {
         Restaurante restaurante = restauranteService.findByNomeAndDonoRestaurante(request.nomeRestaurante(), request.donoRestaurante());
         if (restaurante == null) {
             throw new EmptyResultDataAccessException("Restaurante não encontrado para o nome e dono fornecidos.", 1);

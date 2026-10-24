@@ -2,7 +2,7 @@ package com.tech.challenge.fiap.gestao.restaurante.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tech.challenge.fiap.gestao.restaurante.dtos.EnderecoDTO;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteRequest;
 import com.tech.challenge.fiap.gestao.restaurante.enums.TipoCozinhaEnum;
 import jakarta.persistence.*;
 
@@ -36,7 +36,7 @@ public class Restaurante implements Serializable {
     private String contato;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurante", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Endereco> enderecos = new HashSet<>();
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -48,19 +48,19 @@ public class Restaurante implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<ItensCardapio> itensCardapio = new HashSet<>();
 
-    public Restaurante popularRestaurante(String nome, TipoCozinhaEnum tipoCozinha, String horarioFuncionamento, String contato, Set<EnderecoDTO> enderecos, String nomeUsuario, Set<ItensCardapio> itensCardapio) {
-        popularRestaurante(nome, tipoCozinha, horarioFuncionamento, contato, enderecos, nomeUsuario);
-        this.itensCardapio = itensCardapio;
-        return this;
-    }
-
-    public Restaurante popularRestaurante(String nome, TipoCozinhaEnum tipoCozinha, String horarioFuncionamento, String contato, Set<EnderecoDTO> enderecos, String nomeUsuario) {
-        this.nome = nome;
-        this.tipoCozinha = tipoCozinha;
-        this.horarioFuncionamento = horarioFuncionamento;
-        this.contato = contato;
-        this.enderecos = Endereco.popularEnderecos(enderecos, this, Boolean.TRUE);
-        this.donoRestaurante = new Usuario().cadastrarDonoRestaurante(nomeUsuario)
+    public Restaurante popularRestaurante(RestauranteRequest request) {
+        this.nome = request.nome();
+        this.tipoCozinha = TipoCozinhaEnum.getValue(request.tipoCozinha());
+        this.horarioFuncionamento = request.horarioFuncionamento();
+        this.contato = request.contato();
+        this.enderecos.clear();
+        if (request.enderecos() != null && !request.enderecos().isEmpty()) {
+            this.enderecos.addAll(Endereco.popularEnderecos(request.enderecos(), this, Boolean.TRUE));
+        }
+        if(this.donoRestaurante == null) {
+            this.donoRestaurante = new Usuario();
+        }
+        this.donoRestaurante.cadastrarDonoRestaurante(request.donoRestaurante())
                                             .vincularRestaurante(this);
         return this;
     }
