@@ -1,6 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.service;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultaUsuarioRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultaUsuarioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarUsuarioResponse;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.UsuarioClienteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.exception.ObjetoNaoEncontrado;
@@ -29,7 +29,7 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
-    public List<ConsultarUsuarioResponse> listarUsuarios(ConsultaUsuarioRequest request) {
+    public List<ConsultarUsuarioResponse> listarUsuarios(ConsultaUsuarioDTO request) {
         return usuarioRepository.findAllCustom(request)
                                 .stream()
                                 .map(ConsultarUsuarioResponse::toResponse)

@@ -1,14 +1,12 @@
 package com.tech.challenge.fiap.gestao.restaurante.service;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteRequest;
-import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteDTO;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteResponse;
-import com.tech.challenge.fiap.gestao.restaurante.enums.TipoCozinhaEnum;
 import com.tech.challenge.fiap.gestao.restaurante.exception.ObjetoNaoEncontrado;
 import com.tech.challenge.fiap.gestao.restaurante.model.Restaurante;
 import com.tech.challenge.fiap.gestao.restaurante.repository.RestauranteRepository;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,7 +25,7 @@ public class RestauranteService {
     }
 
     @Transactional(readOnly = true)
-    public List<ConsultarRestauranteResponse> consultarRestaurantes(ConsultarRestauranteRequest request) {
+    public List<ConsultarRestauranteResponse> consultarRestaurantes(ConsultarRestauranteDTO request) {
         return restauranteRepository.findAllCustom(request)
                                         .stream()
                                         .map(ConsultarRestauranteResponse::toResponse)
@@ -35,7 +33,7 @@ public class RestauranteService {
     }
 
     @Transactional
-    public Restaurante cadastrarRestaurante(RestauranteRequest request) {
+    public Restaurante cadastrarRestaurante(RestauranteDTO request) {
         logger.info("Cadastrando restaurante: {}", request);
         Restaurante restaurante = new Restaurante().popularRestaurante(request);
         return restauranteRepository.save(restaurante);
@@ -46,7 +44,7 @@ public class RestauranteService {
     }
 
     @Transactional
-    public Restaurante atualizarRestaurante(Long codigoRestaurante, @Valid RestauranteRequest request) {
+    public Restaurante atualizarRestaurante(Long codigoRestaurante, @Valid RestauranteDTO request) {
         Restaurante restaurante = restauranteRepository.findById(codigoRestaurante)
                 .orElseThrow(() -> new ObjetoNaoEncontrado("Restaurante não encontrado com o código: " + codigoRestaurante));
         restaurante.popularRestaurante(request);

@@ -1,6 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.dtos;
 
-public record ConsultaUsuarioRequest(
+public record ConsultaUsuarioDTO(
         String nome,
         String cpf,
         String email,

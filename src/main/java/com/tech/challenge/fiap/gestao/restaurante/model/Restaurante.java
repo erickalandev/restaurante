@@ -2,7 +2,7 @@ package com.tech.challenge.fiap.gestao.restaurante.model;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.RestauranteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.enums.TipoCozinhaEnum;
 import jakarta.persistence.*;
 
@@ -48,7 +48,7 @@ public class Restaurante implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Set<ItensCardapio> itensCardapio = new HashSet<>();
 
-    public Restaurante popularRestaurante(RestauranteRequest request) {
+    public Restaurante popularRestaurante(RestauranteDTO request) {
         this.nome = request.nome();
         this.tipoCozinha = TipoCozinhaEnum.getValue(request.tipoCozinha());
         this.horarioFuncionamento = request.horarioFuncionamento();

@@ -1,13 +1,12 @@
 package com.tech.challenge.fiap.gestao.restaurante.repository;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarRestauranteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.model.Restaurante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -24,7 +23,7 @@ public interface RestauranteRepository extends JpaRepository<Restaurante, Long> 
               and (:#{#request.cidade} is null or lower(e.cidade) like lower(concat('%', :#{#request.cidade}, '%')))
               and (:#{#request.donoRestaurante} is null or lower(u.nome) like lower(concat('%', :#{#request.donoRestaurante}, '%')))
             """)
-    Set<Restaurante> findAllCustom(@Param("request") ConsultarRestauranteRequest request);
+    Set<Restaurante> findAllCustom(@Param("request") ConsultarRestauranteDTO request);
 
     Restaurante findByNomeAndDonoRestaurante_Nome(String nome, String donoRestaurante);
 }

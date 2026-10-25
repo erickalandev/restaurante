@@ -1,6 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.controller;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultaUsuarioRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultaUsuarioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultarUsuarioResponse;
 import com.tech.challenge.fiap.gestao.restaurante.dtos.UsuarioClienteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.model.Usuario;
@@ -23,7 +23,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/consultar")
-    public ResponseEntity<List<ConsultarUsuarioResponse>> consultarUsuarios(@RequestBody ConsultaUsuarioRequest request) {
+    public ResponseEntity<List<ConsultarUsuarioResponse>> consultarUsuarios(@RequestBody ConsultaUsuarioDTO request) {
         return ResponseEntity.ok(usuarioService.listarUsuarios(request));
     }
 

@@ -1,6 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.dtos;
 
-public record ConsultarRestauranteRequest(
+public record ConsultarRestauranteDTO(
         String nome,
         String estado,
         String cidade,

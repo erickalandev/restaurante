@@ -1,9 +1,7 @@
 package com.tech.challenge.fiap.gestao.restaurante.repository;
 
-import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultaUsuarioRequest;
+import com.tech.challenge.fiap.gestao.restaurante.dtos.ConsultaUsuarioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.model.Usuario;
-import jakarta.validation.constraints.NotBlank;
-import org.hibernate.validator.constraints.br.CPF;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +21,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
               and (:#{#request.email} is null or lower(u.email) like lower(concat('%', :#{#request.email}, '%')))
               and (:#{#request.contato} is null or u.contato like concat('%', :#{#request.contato}, '%'))
             """)
-    Set<Usuario> findAllCustom(@Param("request") ConsultaUsuarioRequest request);
+    Set<Usuario> findAllCustom(@Param("request") ConsultaUsuarioDTO request);
 
     Usuario findByCpf(String cpf);
 }
