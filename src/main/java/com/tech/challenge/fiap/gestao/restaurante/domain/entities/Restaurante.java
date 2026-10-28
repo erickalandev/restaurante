@@ -16,20 +16,15 @@ public class Restaurante {
     private Usuario donoRestaurante;
     private Set<ItensCardapio> itensCardapio = new HashSet<>();
 
-    public static Restaurante criarRestaurante(String nome, String tipoCozinha, String horarioFuncionamento, String contato, String donoRestaurante) {
+    public static Restaurante criarRestaurante(Long restauranteId, String nome, String tipoCozinha, String horarioFuncionamento, String contato, String donoRestaurante) {
         Restaurante.validarCamposObrigatorio(nome, tipoCozinha, horarioFuncionamento, contato, donoRestaurante);
         Restaurante restaurante = new Restaurante();
+        restaurante.setRestauranteId(restauranteId);
         restaurante.setNome(nome);
         restaurante.setTipoCozinha(tipoCozinha);
         restaurante.setHorarioFuncionamento(horarioFuncionamento);
         restaurante.setContato(contato);
         restaurante.setDonoRestaurante(Usuario.criarUsuarioDono(donoRestaurante));
-        return restaurante;
-    }
-
-    public static Restaurante atualizarRestaurante(Long restauranteId, String nome, String tipoCozinha, String horarioFuncionamento, String contato, String donoRestaurante) {
-        Restaurante restaurante = Restaurante.criarRestaurante(nome, tipoCozinha, horarioFuncionamento, contato, donoRestaurante);
-        restaurante.setRestauranteId(restauranteId);
         return restaurante;
     }
 

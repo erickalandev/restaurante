@@ -16,7 +16,6 @@ import com.tech.challenge.fiap.gestao.restaurante.presenter.RestaurantePresenter
 import com.tech.challenge.fiap.gestao.restaurante.presenter.UsuarioPresenter;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -38,7 +37,6 @@ public class GestaoRestauranteDataSource implements IDataSource {
     }
 
     @Override
-    @Transactional
     public Usuario cadastrarUsuario(Usuario novoUsuarioCliente) {
         var UsuarioEntity = UsuarioPresenter.toEntity(novoUsuarioCliente);
         var response = usuarioRepository.save(UsuarioEntity);
@@ -55,13 +53,11 @@ public class GestaoRestauranteDataSource implements IDataSource {
     }
 
     @Override
-    @Transactional
     public Usuario atualizarUsuario(Usuario atualizarUsuarioClienteDTO) {
         return cadastrarUsuario(atualizarUsuarioClienteDTO);
     }
 
     @Override
-    @Transactional
     public void deletarUsuarioPorId(Long id) {
         usuarioRepository.deleteById(id);
     }
@@ -82,7 +78,6 @@ public class GestaoRestauranteDataSource implements IDataSource {
     }
 
     @Override
-    @Transactional
     public Restaurante cadastrarRestaurante(Restaurante restaurante) {
         var restauranteEntity = RestaurantePresenter.toEntity(restaurante);
         var response = restauranteRepository.save(restauranteEntity);
@@ -90,7 +85,6 @@ public class GestaoRestauranteDataSource implements IDataSource {
     }
 
     @Override
-    @Transactional
     public Restaurante atualizarRestaurante(Restaurante restaurante) {
         return cadastrarRestaurante(restaurante);
     }
@@ -104,13 +98,11 @@ public class GestaoRestauranteDataSource implements IDataSource {
     }
 
     @Override
-    @Transactional
     public void deletarRestaurante(Long restauranteId) {
         restauranteRepository.deleteById(restauranteId);
     }
 
     @Override
-    @Transactional
     public List<ItensCardapio> salvarTodosItensCardapio(List<ItensCardapio> itensCardapio) {
         var request = itensCardapio.stream().map(ItensCardapioPresenter::toEntity).collect(Collectors.toSet());
         return itensCardapioRepository.saveAll(request).stream()
@@ -127,13 +119,11 @@ public class GestaoRestauranteDataSource implements IDataSource {
     }
 
     @Override
-    @Transactional
     public void deletarItemCardapio(Long codigoItemCardapio) {
         itensCardapioRepository.deleteById(codigoItemCardapio);
     }
 
     @Override
-    @Transactional
     public ItensCardapio atualizarItemCardapio(ItensCardapio itemCardapioAtualizado) {
         var request = ItensCardapioPresenter.toEntity(itemCardapioAtualizado);
         return ItensCardapioPresenter.toDomain(request);

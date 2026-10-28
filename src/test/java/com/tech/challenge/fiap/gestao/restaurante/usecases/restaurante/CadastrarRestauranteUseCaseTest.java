@@ -5,7 +5,7 @@ import com.tech.challenge.fiap.gestao.restaurante.application.dtos.RestauranteDT
 import com.tech.challenge.fiap.gestao.restaurante.application.usecases.restaurante.CadastrarRestauranteUseCase;
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.Endereco;
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.Restaurante;
-import com.tech.challenge.fiap.gestao.restaurante.exception.RestauranteNaoEncontradoException;
+import com.tech.challenge.fiap.gestao.restaurante.exception.RestauranteEncontradoException;
 import com.tech.challenge.fiap.gestao.restaurante.domain.repository.IRestauranteGateway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,16 +34,7 @@ class CadastrarRestauranteUseCaseTest {
     }
 
     @Test
-    void deveCadastrarRestauranteQuandoConsultaRetornaRestauranteExistente() {
-        Restaurante restauranteExistente = Restaurante.criarRestaurante(
-                "La Mesa",
-                "Italiana",
-                "11h às 23h",
-                "(11) 3456-7890",
-                "Carlos"
-        );
-        restauranteExistente.setRestauranteId(10L);
-
+    void deveCadastrarRestauranteQuandoNaoExiste() {
         EnderecoDTO enderecoDTO = new EnderecoDTO(
                 "Rua das Flores",
                 "São Paulo",
@@ -63,21 +54,23 @@ class CadastrarRestauranteUseCaseTest {
         );
 
         Restaurante restauranteCadastrado = Restaurante.criarRestaurante(
+                20L,
                 dto.nome(),
                 dto.tipoCozinha(),
                 dto.horarioFuncionamento(),
                 dto.contato(),
                 dto.donoRestaurante()
         );
-        restauranteCadastrado.setRestauranteId(20L);
-        restauranteCadastrado.adicionarEndereco(Endereco.criarEndereco("Rua das Flores",
-                "São Paulo",
-                "SP",
-                "01000-000",
-                "123",
-                "Apto 2"));
+        restauranteCadastrado.adicionarEndereco(Endereco.criarEndereco(
+                enderecoDTO.rua(),
+                enderecoDTO.cidade(),
+                enderecoDTO.estado(),
+                enderecoDTO.cep(),
+                enderecoDTO.numero(),
+                enderecoDTO.complemento()
+        ));
 
-        when(restauranteGateway.buscarRestaurantePorNomeEDono("La Mesa", "Carlos")).thenReturn(restauranteExistente);
+        when(restauranteGateway.buscarRestaurantePorNomeEDono("La Mesa", "Carlos")).thenReturn(null);
         when(restauranteGateway.cadastrarRestaurante(any(Restaurante.class))).thenReturn(restauranteCadastrado);
 
         Restaurante resultado = useCase.executar(dto);
@@ -91,7 +84,16 @@ class CadastrarRestauranteUseCaseTest {
     }
 
     @Test
-    void deveLancarExcecaoQuandoRestauranteNaoExisteNaConsulta() {
+    void deveLancarExcecaoQuandoRestauranteJaExiste() {
+        Restaurante restauranteExistente = Restaurante.criarRestaurante(
+                10L,
+                "La Mesa",
+                "Italiana",
+                "11h às 23h",
+                "(11) 3456-7890",
+                "Carlos"
+        );
+
         EnderecoDTO enderecoDTO = new EnderecoDTO(
                 "Rua das Flores",
                 "São Paulo",
@@ -102,7 +104,7 @@ class CadastrarRestauranteUseCaseTest {
         );
 
         RestauranteDTO dto = new RestauranteDTO(
-                "Restaurante Inexistente",
+                "La Mesa",
                 "Italiana",
                 "11h às 23h",
                 "(11) 3456-7890",
@@ -110,15 +112,15 @@ class CadastrarRestauranteUseCaseTest {
                 "Carlos"
         );
 
-        when(restauranteGateway.buscarRestaurantePorNomeEDono("Restaurante Inexistente", "Carlos")).thenReturn(null);
+        when(restauranteGateway.buscarRestaurantePorNomeEDono("La Mesa", "Carlos")).thenReturn(restauranteExistente);
 
-        RestauranteNaoEncontradoException exception = assertThrows(
-                RestauranteNaoEncontradoException.class,
+        RestauranteEncontradoException exception = assertThrows(
+                RestauranteEncontradoException.class,
                 () -> useCase.executar(dto)
         );
 
         assertEquals(
-                "Restaurante nao encontrado para os valores: nome=Restaurante Inexistente Dono=Carlos",
+                "Restaurante ja existente.",
                 exception.getMessage()
         );
     }

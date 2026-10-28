@@ -40,6 +40,7 @@ class CadastrarItensCardapioUseCaseTest {
     @Test
     void deveCadastrarItensQuandoRestauranteExiste() {
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",

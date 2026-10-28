@@ -36,6 +36,7 @@ class AtualizarItensCardapioUseCaseTest {
     void deveAtualizarItemQuandoCodigoExiste() {
         Long codigoItemCardapio = 10L;
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",

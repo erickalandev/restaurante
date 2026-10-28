@@ -30,6 +30,7 @@ class DeletarRestauranteClienteUseCaseTest {
     void deveDeletarRestauranteQuandoExistir() {
         Long restauranteId = 10L;
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",
@@ -38,23 +39,24 @@ class DeletarRestauranteClienteUseCaseTest {
         );
         restaurante.setRestauranteId(restauranteId);
 
-        when(restauranteGateway.buscarPorId(restauranteId)).thenReturn(restaurante);
+        when(restauranteGateway.buscarRestaurantePorNomeEDono(restaurante.getNome(), restaurante.getDonoRestaurante().getNome())).thenReturn(restaurante);
 
-        useCase.executar(restauranteId);
+        useCase.executar(restaurante.getNome(), restaurante.getDonoRestaurante().getNome());
 
-        verify(restauranteGateway).buscarPorId(restauranteId);
+        verify(restauranteGateway).buscarRestaurantePorNomeEDono(restaurante.getNome(), restaurante.getDonoRestaurante().getNome());
         verify(restauranteGateway).deletarRestaurante(restauranteId);
     }
 
     @Test
     void deveLancarExcecaoQuandoRestauranteNaoExiste() {
-        Long restauranteId = 99L;
+        String nome = "La Mesa";
+        String dono = "Carlos";
 
-        when(restauranteGateway.buscarPorId(restauranteId)).thenReturn(null);
+        when(restauranteGateway.buscarRestaurantePorNomeEDono(nome, dono)).thenReturn(null);
 
         assertThrows(
                 RestauranteNaoEncontradoException.class,
-                () -> useCase.executar(restauranteId)
+                () -> useCase.executar(nome, dono)
         );
     }
 }

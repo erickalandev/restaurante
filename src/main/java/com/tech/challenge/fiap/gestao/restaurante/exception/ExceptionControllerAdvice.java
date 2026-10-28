@@ -50,7 +50,7 @@ public class ExceptionControllerAdvice {
                 ));
     }
 
-    @ExceptionHandler(UsuarioEncontradoException.class)
+    @ExceptionHandler({UsuarioEncontradoException.class, RestauranteEncontradoException.class})
     public ResponseEntity<ErrorResponse> handleDadosEncontradoException(RuntimeException ex, HttpServletRequest request) {
         FieldErrorDetail errorDetail = new FieldErrorDetail("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)

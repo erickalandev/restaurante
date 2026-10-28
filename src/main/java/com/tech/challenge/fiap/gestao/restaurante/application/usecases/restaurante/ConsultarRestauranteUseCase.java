@@ -41,14 +41,14 @@ public class ConsultarRestauranteUseCase {
         String dono = FiltroUtils.normalizarTexto(donoRestaurante);
 
         if (nome == null || dono == null) {
-            throw new IllegalArgumentException("O nome do restaurante e o nome do dono são obrigatórios.");
+            throw new IllegalArgumentException("O nome do Restaurante e o nome do dono sao obrigatorios.");
         }
 
         Restaurante restaurante = restauranteGateway.buscarRestaurantePorNomeEDono(nome, dono);
 
         if (restaurante == null) {
             throw new RestauranteNaoEncontradoException(
-                    "Restaurante não encontrado para os valores: nome=" + nome + ", dono=" + dono
+                    "Restaurante nao encontrado para os valores: nome=" + nome + " Dono=" + dono
             );
         }
 

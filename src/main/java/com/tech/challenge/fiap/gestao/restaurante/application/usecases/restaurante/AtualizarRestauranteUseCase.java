@@ -19,10 +19,10 @@ public class AtualizarRestauranteUseCase {
     }
 
     public Restaurante executar(RestauranteDTO restauranteDTO) {
-        Restaurante restauranteExistente = ConsultarRestauranteUseCase.consultar(restauranteGateway)
+        final Restaurante restauranteExistente = ConsultarRestauranteUseCase.consultar(restauranteGateway)
                                    .restaurantePorNomeEDono(restauranteDTO.nome(), restauranteDTO.donoRestaurante());
 
-        Restaurante restaurante = Restaurante.atualizarRestaurante(
+        Restaurante restaurante = Restaurante.criarRestaurante(
                 restauranteExistente.getRestauranteId(),
                 restauranteDTO.nome(),
                 restauranteDTO.tipoCozinha(),
@@ -30,6 +30,8 @@ public class AtualizarRestauranteUseCase {
                 restauranteDTO.contato(),
                 restauranteDTO.donoRestaurante()
         );
+
+        restaurante.getDonoRestaurante().setUsuarioId(restauranteExistente.getDonoRestaurante().getUsuarioId());
 
         for (EnderecoDTO dto: restauranteDTO.enderecos()) {
             final Endereco endereco = Endereco.criarEndereco(

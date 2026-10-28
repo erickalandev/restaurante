@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,7 @@ public class ItensCardapioController {
     }
 
     @PostMapping("/cadastrar")
+    @Transactional
     public ResponseEntity<List<ItensCardapioDTO>> cadastrarItensCardapio(@RequestHeader String nomeRestaurante,
                                                                          @RequestHeader String donoRestaurante,
                                                                          @RequestBody List<ItensCardapioDTO> request) {
@@ -60,6 +62,7 @@ public class ItensCardapioController {
     }
 
     @GetMapping("/consultar")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<ItensCardapioDTO>> consultarItensCardapio(@RequestHeader String nomeRestaurante,
                                                                          @RequestHeader String donoRestaurante) {
         var operacao = "consultar Itens Cardapio";
@@ -84,6 +87,7 @@ public class ItensCardapioController {
     }
 
     @DeleteMapping("/deletar")
+    @Transactional
     public ResponseEntity<Void> deletarItensCardapio(@RequestParam Long codigoItemCardapio) {
         var operacao = "deletar Itens Cardapio";
         LogUtil.inicio(log, operacao, codigoItemCardapio);
@@ -105,6 +109,7 @@ public class ItensCardapioController {
     }
 
     @PutMapping("/atualizar")
+    @Transactional
     public ResponseEntity<ItensCardapioDTO> atualizarItensCardapio(@RequestBody ItensCardapioDTO itensCardapioDTO) {
         var operacao = "atualizar Itens Cardapio";
         LogUtil.inicio(log, operacao, itensCardapioDTO);

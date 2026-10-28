@@ -36,6 +36,7 @@ class AtualizarRestauranteUseCaseTest {
     @Test
     void deveAtualizarRestauranteQuandoExistir() {
         Restaurante restauranteExistente = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",
@@ -71,7 +72,7 @@ class AtualizarRestauranteUseCaseTest {
                 "Carlos"
         );
 
-        Restaurante restauranteAtualizado = Restaurante.atualizarRestaurante(
+        Restaurante restauranteAtualizado = Restaurante.criarRestaurante(
                 10L,
                 dto.nome(),
                 dto.tipoCozinha(),

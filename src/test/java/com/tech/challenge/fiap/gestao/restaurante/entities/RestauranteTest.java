@@ -12,6 +12,7 @@ class RestauranteTest {
     @Test
     void deveCriarRestauranteComDadosValidos() {
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "Segunda a Domingo, 11h às 23h",
@@ -58,7 +59,7 @@ class RestauranteTest {
 
     @Test
     void deveAtualizarRestauranteComDadosValidos() {
-        Restaurante restaurante = Restaurante.atualizarRestaurante(
+        Restaurante restaurante = Restaurante.criarRestaurante(
                 7L,
                 "Sabor do Sul",
                 "Brasileira",
@@ -79,32 +80,32 @@ class RestauranteTest {
 
     @Test
     void deveLancarExcecaoQuandoNomeForVazio() {
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "Italiana", "11h às 23h", "(11) 3456-7890", "Carlos"));
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("", "Italiana", "11h às 23h", "(11) 3456-7890", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, null, "Italiana", "11h às 23h", "(11) 3456-7890", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "", "Italiana", "11h às 23h", "(11) 3456-7890", "Carlos"));
     }
 
     @Test
     void deveLancarExcecaoQuandoTipoCozinhaForVazio() {
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", null, "11h às 23h", "(11) 3456-7890", "Carlos"));
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "", "11h às 23h", "(11) 3456-7890", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", null, "11h às 23h", "(11) 3456-7890", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "", "11h às 23h", "(11) 3456-7890", "Carlos"));
     }
 
     @Test
     void deveLancarExcecaoQuandoHorarioForVazio() {
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "Italiana", null, "(11) 3456-7890", "Carlos"));
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "Italiana", "", "(11) 3456-7890", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "Italiana", null, "(11) 3456-7890", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "Italiana", "", "(11) 3456-7890", "Carlos"));
     }
 
     @Test
     void deveLancarExcecaoQuandoContatoForVazio() {
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "Italiana", "11h às 23h", null, "Carlos"));
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "Italiana", "11h às 23h", "", "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "Italiana", "11h às 23h", null, "Carlos"));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "Italiana", "11h às 23h", "", "Carlos"));
     }
 
     @Test
     void deveLancarExcecaoQuandoDonoForVazio() {
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "Italiana", "11h às 23h", "(11) 3456-7890", null));
-        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante("La Mesa", "Italiana", "11h às 23h", "(11) 3456-7890", ""));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "Italiana", "11h às 23h", "(11) 3456-7890", null));
+        assertThrows(IllegalArgumentException.class, () -> Restaurante.criarRestaurante(null, "La Mesa", "Italiana", "11h às 23h", "(11) 3456-7890", ""));
     }
 
     @Test
@@ -124,6 +125,7 @@ class RestauranteTest {
     @Test
     void deveMesclarRestauranteComSucesso() {
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",

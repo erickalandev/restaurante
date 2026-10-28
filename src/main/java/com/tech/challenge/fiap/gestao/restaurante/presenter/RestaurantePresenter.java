@@ -37,11 +37,15 @@ public abstract class RestaurantePresenter {
             return null;
         }
         var restaurante = Restaurante.criarRestaurante(
+                restauranteEntity.getRestauranteId(),
                 restauranteEntity.getNome(),
                 restauranteEntity.getTipoCozinha().getDescricao(),
                 restauranteEntity.getHorarioFuncionamento(),
                 restauranteEntity.getContato(),
                 restauranteEntity.getDonoRestaurante().getNome());
+
+        if(restauranteEntity.getDonoRestaurante() != null && restauranteEntity.getDonoRestaurante().getUsuarioId() != null)
+            restaurante.getDonoRestaurante().setUsuarioId(restauranteEntity.getDonoRestaurante().getUsuarioId());
 
         restauranteEntity.getEnderecoEntities().forEach( enderecoEntity -> {
             restaurante.adicionarEndereco(Endereco.criarEndereco(

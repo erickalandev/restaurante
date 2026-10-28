@@ -74,6 +74,7 @@ class ItensCardapioTest {
     @Test
     void deveAdicionarRestauranteAoItem() {
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",

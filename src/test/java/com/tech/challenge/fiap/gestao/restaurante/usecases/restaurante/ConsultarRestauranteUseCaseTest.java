@@ -35,6 +35,7 @@ class ConsultarRestauranteUseCaseTest {
     @Test
     void deveConsultarRestaurantesComFiltro() {
         Restaurante restaurante1 = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",
@@ -44,6 +45,7 @@ class ConsultarRestauranteUseCaseTest {
         restaurante1.setRestauranteId(1L);
 
         Restaurante restaurante2 = Restaurante.criarRestaurante(
+                null,
                 "Bistro do Chef",
                 "Brasileira",
                 "12h às 22h",

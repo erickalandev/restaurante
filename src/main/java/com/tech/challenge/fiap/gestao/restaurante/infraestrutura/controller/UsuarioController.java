@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/consultar")
+    @Transactional(readOnly = true)
     public ResponseEntity<List<UsuarioDTO>> consultarUsuarios(@RequestBody ConsultaUsuarioDTO request) {
         var operacao = "consultar usuarios";
         LogUtil.inicio(log, operacao, request);
@@ -57,6 +59,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/cadastrar-cliente")
+    @Transactional
     public ResponseEntity<UsuarioDTO> cadastrarUsuarioCliente(@RequestBody NovoUsuarioClienteDTO request) {
         var operacao = "cadastrar Usuario Cliente";
         LogUtil.inicio(log, operacao, request);
@@ -79,6 +82,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/atualizar")
+    @Transactional
     public ResponseEntity<UsuarioDTO> atualizarUsuarioCliente(@RequestBody NovoUsuarioClienteDTO request) {
         var operacao = "atualizar Usuario Cliente";
         LogUtil.inicio(log, operacao, request);
@@ -101,6 +105,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/deletar")
+    @Transactional
     public ResponseEntity<Void> deletarUsuario(@RequestHeader String cpf) {
         var operacao = "deletar Usuario";
         LogUtil.inicio(log, operacao, cpf);

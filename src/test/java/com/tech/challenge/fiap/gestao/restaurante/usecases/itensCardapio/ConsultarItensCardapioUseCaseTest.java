@@ -35,6 +35,7 @@ class ConsultarItensCardapioUseCaseTest {
     @Test
     void deveConsultarItensOrdenadosPorNome() {
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 "La Mesa",
                 "Italiana",
                 "11h às 23h",

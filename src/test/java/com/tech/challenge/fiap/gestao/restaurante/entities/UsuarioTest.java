@@ -105,6 +105,6 @@ class UsuarioTest {
 
         usuario.adicionarEndereco(null);
 
-        assertNull(usuario.getEnderecos());
+        assertTrue(usuario.getEnderecos().isEmpty());
     }
 }

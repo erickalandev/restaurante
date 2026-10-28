@@ -22,6 +22,7 @@ public class CadastrarRestauranteUseCase {
     public Restaurante executar(RestauranteDTO restauranteDTO) {
 
         Restaurante restaurante = Restaurante.criarRestaurante(
+                null,
                 restauranteDTO.nome(),
                 restauranteDTO.tipoCozinha(),
                 restauranteDTO.horarioFuncionamento(),
