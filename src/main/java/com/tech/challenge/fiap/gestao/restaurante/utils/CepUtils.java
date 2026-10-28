@@ -2,7 +2,7 @@ package com.tech.challenge.fiap.gestao.restaurante.utils;
 
 import org.springframework.util.StringUtils;
 
-public abstract class CepUtils {
+public class CepUtils {
 
     public static String formatarCep(String cep) {
         validaCep(cep);

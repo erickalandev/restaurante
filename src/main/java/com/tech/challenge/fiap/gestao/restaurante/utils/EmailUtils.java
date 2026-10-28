@@ -2,7 +2,7 @@ package com.tech.challenge.fiap.gestao.restaurante.utils;
 
 import org.springframework.util.StringUtils;
 
-public abstract class EmailUtils {
+public class EmailUtils {
 
     public static void validaEmail(String email) {
         if (!isEmailValido(email)) {
@@ -11,7 +11,7 @@ public abstract class EmailUtils {
     }
 
     private static boolean isEmailValido(String email) {
-        if (StringUtils.hasText(email)) {
+        if (!StringUtils.hasText(email)) {
             return false;
         }
 

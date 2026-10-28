@@ -2,10 +2,10 @@ package com.tech.challenge.fiap.gestao.restaurante.utils;
 
 import org.springframework.util.StringUtils;
 
-public abstract class ContatoUtils {
+public class ContatoUtils {
 
     private static void validaContato(String contato) {
-        if (StringUtils.hasText(contato)) {
+        if (!StringUtils.hasText(contato)) {
             return;
         }
 

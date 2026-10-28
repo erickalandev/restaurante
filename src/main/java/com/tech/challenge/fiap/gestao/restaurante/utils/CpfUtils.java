@@ -2,7 +2,7 @@ package com.tech.challenge.fiap.gestao.restaurante.utils;
 
 import org.springframework.util.StringUtils;
 
-public abstract class CpfUtils {
+public class CpfUtils {
 
     private static void validaCpf(String cpf) {
         if (!isCpfValido(cpf)) {
@@ -16,7 +16,7 @@ public abstract class CpfUtils {
     }
 
     private static boolean isCpfValido(String cpf) {
-        if (StringUtils.hasText(cpf)) {
+        if (!StringUtils.hasText(cpf)) {
             return false;
         }
 
