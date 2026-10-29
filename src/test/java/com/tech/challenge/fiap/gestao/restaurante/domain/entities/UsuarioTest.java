@@ -1,4 +1,4 @@
-package com.tech.challenge.fiap.gestao.restaurante.entities;
+package com.tech.challenge.fiap.gestao.restaurante.domain.entities;
 
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.Usuario;
 import com.tech.challenge.fiap.gestao.restaurante.enums.TipoUsuarioEnum;

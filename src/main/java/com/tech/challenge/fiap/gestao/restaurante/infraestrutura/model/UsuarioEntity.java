@@ -63,8 +63,4 @@ public class UsuarioEntity implements Serializable {
         enderecoEntities.clear();
         enderecoEntities.addAll(enderecos);
     }
-
-    public void vincularRestaurante(RestauranteEntity restauranteEntity) {
-        this.restauranteEntity = restauranteEntity;
-    }
 }

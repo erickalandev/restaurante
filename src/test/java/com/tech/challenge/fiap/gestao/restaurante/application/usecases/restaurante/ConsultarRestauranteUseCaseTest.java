@@ -1,4 +1,4 @@
-package com.tech.challenge.fiap.gestao.restaurante.usecases.restaurante;
+package com.tech.challenge.fiap.gestao.restaurante.application.usecases.restaurante;
 
 import com.tech.challenge.fiap.gestao.restaurante.application.dtos.ConsultarRestauranteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.application.usecases.restaurante.ConsultarRestauranteUseCase;

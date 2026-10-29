@@ -1,4 +1,4 @@
-package com.tech.challenge.fiap.gestao.restaurante.usecases.itensCardapio;
+package com.tech.challenge.fiap.gestao.restaurante.application.usecases.itensCardapio;
 
 import com.tech.challenge.fiap.gestao.restaurante.application.dtos.ItensCardapioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.application.usecases.itensCardapio.AtualizarItensCardapioUseCase;

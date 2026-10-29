@@ -1,4 +1,4 @@
-package com.tech.challenge.fiap.gestao.restaurante.usecases.usuario;
+package com.tech.challenge.fiap.gestao.restaurante.application.usecases.usuario;
 
 import com.tech.challenge.fiap.gestao.restaurante.application.dtos.NovoUsuarioClienteDTO;
 import com.tech.challenge.fiap.gestao.restaurante.application.usecases.usuario.CadastrarUsuarioClienteUseCase;

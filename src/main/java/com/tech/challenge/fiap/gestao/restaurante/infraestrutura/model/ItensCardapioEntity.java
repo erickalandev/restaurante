@@ -48,15 +48,6 @@ public class ItensCardapioEntity implements Serializable {
         this.restauranteEntity = restauranteEntity;
     }
 
-    public ItensCardapioEntity(String nome, String descricao, BigDecimal preco, Boolean disponibilidadeComercioLocal, String foto, RestauranteEntity restauranteEntity) {
-        this.nome = nome;
-        this.descricao = descricao;
-        this.preco = preco;
-        this.disponibilidadeComercioLocal = disponibilidadeComercioLocal;
-        this.foto = foto;
-        this.restauranteEntity = restauranteEntity;
-    }
-
     public Long getId() {
         return id;
     }
@@ -87,9 +78,5 @@ public class ItensCardapioEntity implements Serializable {
 
     public RestauranteEntity getRestaurante() {
         return restauranteEntity;
-    }
-
-    public void setRestauranteEntity(RestauranteEntity restauranteEntity) {
-        this.restauranteEntity = restauranteEntity;
     }
 }

@@ -1,6 +1,5 @@
-package com.tech.challenge.fiap.gestao.restaurante.usecases.itensCardapio;
+package com.tech.challenge.fiap.gestao.restaurante.application.usecases.itensCardapio;
 
-import com.tech.challenge.fiap.gestao.restaurante.application.usecases.itensCardapio.ConsultarItensCardapioUseCase;
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.ItensCardapio;
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.Restaurante;
 import com.tech.challenge.fiap.gestao.restaurante.exception.RestauranteNaoEncontradoException;
@@ -38,7 +37,7 @@ class ConsultarItensCardapioUseCaseTest {
                 null,
                 "La Mesa",
                 "Italiana",
-                "11h às 23h",
+                "11h Ã s 23h",
                 "(11) 3456-7890",
                 "Carlos"
         );
@@ -51,7 +50,7 @@ class ConsultarItensCardapioUseCaseTest {
                 "pepperoni.jpg"
         );
         ItensCardapio item1 = ItensCardapio.criarItemCardapio(
-                "Pastel de Camarão",
+                "Pastel de CamarÃ£o",
                 new BigDecimal("30.00"),
                 "Pastel crocante",
                 true,
@@ -65,7 +64,7 @@ class ConsultarItensCardapioUseCaseTest {
         List<ItensCardapio> resultado = useCase.executar("La Mesa", "Carlos");
 
         assertEquals(2, resultado.size());
-        assertEquals("Pastel de Camarão", resultado.get(0).getNome());
+        assertEquals("Pastel de CamarÃ£o", resultado.get(0).getNome());
         assertEquals("Pizza Pepperoni", resultado.get(1).getNome());
         verify(restauranteGateway).buscarRestaurantePorNomeEDono("La Mesa", "Carlos");
     }
@@ -86,3 +85,4 @@ class ConsultarItensCardapioUseCaseTest {
         );
     }
 }
+
