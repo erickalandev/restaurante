@@ -104,7 +104,10 @@ public class GestaoRestauranteDataSource implements IDataSource {
 
     @Override
     public List<ItensCardapio> salvarTodosItensCardapio(List<ItensCardapio> itensCardapio) {
-        var request = itensCardapio.stream().map(ItensCardapioPresenter::toEntity).collect(Collectors.toSet());
+        var request = itensCardapio.stream()
+                .map(ItensCardapioPresenter::toEntity)
+                .toList();
+
         return itensCardapioRepository.saveAll(request).stream()
                 .map(ItensCardapioPresenter::toDomain)
                 .toList();
@@ -126,6 +129,7 @@ public class GestaoRestauranteDataSource implements IDataSource {
     @Override
     public ItensCardapio atualizarItemCardapio(ItensCardapio itemCardapioAtualizado) {
         var request = ItensCardapioPresenter.toEntity(itemCardapioAtualizado);
-        return ItensCardapioPresenter.toDomain(request);
+        var response = itensCardapioRepository.save(request);
+        return ItensCardapioPresenter.toDomain(response);
     }
 }

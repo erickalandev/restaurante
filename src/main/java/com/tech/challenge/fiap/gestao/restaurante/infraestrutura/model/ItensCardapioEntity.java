@@ -61,6 +61,10 @@ public class ItensCardapioEntity implements Serializable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getNome() {
         return nome;
     }
@@ -83,5 +87,9 @@ public class ItensCardapioEntity implements Serializable {
 
     public RestauranteEntity getRestaurante() {
         return restauranteEntity;
+    }
+
+    public void setRestauranteEntity(RestauranteEntity restauranteEntity) {
+        this.restauranteEntity = restauranteEntity;
     }
 }

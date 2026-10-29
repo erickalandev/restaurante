@@ -5,6 +5,7 @@ import com.tech.challenge.fiap.gestao.restaurante.application.dtos.RestauranteDT
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.Endereco;
 import com.tech.challenge.fiap.gestao.restaurante.domain.entities.Restaurante;
 import com.tech.challenge.fiap.gestao.restaurante.infraestrutura.model.EnderecoEntity;
+import com.tech.challenge.fiap.gestao.restaurante.infraestrutura.model.ItensCardapioEntity;
 import com.tech.challenge.fiap.gestao.restaurante.infraestrutura.model.RestauranteEntity;
 import com.tech.challenge.fiap.gestao.restaurante.infraestrutura.model.UsuarioEntity;
 import org.springframework.util.ObjectUtils;
@@ -33,29 +34,52 @@ public abstract class RestaurantePresenter {
     }
 
     public static Restaurante toDomain(RestauranteEntity restauranteEntity) {
-        if(restauranteEntity == null) {
+        if (restauranteEntity == null) {
             return null;
         }
+
+        var restaurante = toDomainWithoutItens(restauranteEntity);
+
+        if (!ObjectUtils.isEmpty(restauranteEntity.getEnderecoEntities())) {
+            restauranteEntity.getEnderecoEntities().forEach(enderecoEntity -> {
+                restaurante.adicionarEndereco(Endereco.criarEndereco(
+                        enderecoEntity.getRua(),
+                        enderecoEntity.getCidade(),
+                        enderecoEntity.getEstado(),
+                        enderecoEntity.getCep(),
+                        enderecoEntity.getNumero(),
+                        enderecoEntity.getComplemento()
+                ));
+            });
+        }
+
+        if (!ObjectUtils.isEmpty(restauranteEntity.getItensCardapioEntity())) {
+            var itens = restauranteEntity.getItensCardapioEntity().stream()
+                    .map(ItensCardapioPresenter::toDomain)
+                    .collect(Collectors.toSet());
+            restaurante.setItensCardapio(itens);
+        }
+
+        return restaurante;
+    }
+
+    public static Restaurante toDomainWithoutItens(RestauranteEntity restauranteEntity) {
+        if (restauranteEntity == null) {
+            return null;
+        }
+
         var restaurante = Restaurante.criarRestaurante(
                 restauranteEntity.getRestauranteId(),
                 restauranteEntity.getNome(),
                 restauranteEntity.getTipoCozinha().getDescricao(),
                 restauranteEntity.getHorarioFuncionamento(),
                 restauranteEntity.getContato(),
-                restauranteEntity.getDonoRestaurante().getNome());
+                restauranteEntity.getDonoRestaurante() != null ? restauranteEntity.getDonoRestaurante().getNome() : null
+        );
 
-        if(restauranteEntity.getDonoRestaurante() != null && restauranteEntity.getDonoRestaurante().getUsuarioId() != null)
+        if (restauranteEntity.getDonoRestaurante() != null && restauranteEntity.getDonoRestaurante().getUsuarioId() != null) {
             restaurante.getDonoRestaurante().setUsuarioId(restauranteEntity.getDonoRestaurante().getUsuarioId());
-
-        restauranteEntity.getEnderecoEntities().forEach( enderecoEntity -> {
-            restaurante.adicionarEndereco(Endereco.criarEndereco(
-                    enderecoEntity.getRua(),
-                    enderecoEntity.getCidade(),
-                    enderecoEntity.getEstado(),
-                    enderecoEntity.getCep(),
-                    enderecoEntity.getNumero(),
-                    enderecoEntity.getComplemento()));
-        });
+        }
 
         return restaurante;
     }

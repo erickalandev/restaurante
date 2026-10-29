@@ -36,13 +36,23 @@ public abstract class ItensCardapioPresenter {
     }
 
     public static ItensCardapio toDomain(ItensCardapioEntity itensCardapioEntity) {
-        var itensCardapio = ItensCardapio.criarItemCardapio(itensCardapioEntity.getNome(),
+        if (itensCardapioEntity == null) {
+            return null;
+        }
+
+        var itensCardapio = ItensCardapio.criarItemCardapio(
+                itensCardapioEntity.getNome(),
                 itensCardapioEntity.getPreco(),
                 itensCardapioEntity.getDescricao(),
                 itensCardapioEntity.getDisponibilidadeComercioLocal(),
-                itensCardapioEntity.getFoto());
-        var restaurante = RestaurantePresenter.toDomain(itensCardapioEntity.getRestaurante());
-        itensCardapio.adicionarRestaurante(restaurante);
+                itensCardapioEntity.getFoto()
+        );
+        itensCardapio.setCodigoItemCardapio(itensCardapioEntity.getId());
+
+        if (itensCardapioEntity.getRestaurante() != null) {
+            var restaurante = RestaurantePresenter.toDomainWithoutItens(itensCardapioEntity.getRestaurante());
+            itensCardapio.adicionarRestaurante(restaurante);
+        }
 
         return itensCardapio;
     }

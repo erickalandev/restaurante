@@ -1,5 +1,6 @@
 package com.tech.challenge.fiap.gestao.restaurante.infraestrutura.controller;
 
+import com.tech.challenge.fiap.gestao.restaurante.application.dtos.CadastrarItensCardapioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.application.dtos.ItensCardapioDTO;
 import com.tech.challenge.fiap.gestao.restaurante.application.gateway.ItensCardapioGateway;
 import com.tech.challenge.fiap.gestao.restaurante.application.gateway.RestauranteGateway;
@@ -38,7 +39,7 @@ public class ItensCardapioController {
     @Transactional
     public ResponseEntity<List<ItensCardapioDTO>> cadastrarItensCardapio(@RequestHeader String nomeRestaurante,
                                                                          @RequestHeader String donoRestaurante,
-                                                                         @RequestBody List<ItensCardapioDTO> request) {
+                                                                         @RequestBody CadastrarItensCardapioDTO request) {
         var operacao = "cadastrar Itens Cardapio";
         var dados = "nomeRestaurante: " + nomeRestaurante + " donoRestaurante: " + donoRestaurante +" itens: ";
         LogUtil.inicio(log, operacao, dados + request);
@@ -47,7 +48,7 @@ public class ItensCardapioController {
             var itensCardapioGateway = ItensCardapioGateway.create(this.dataSource);
             var restauranteGateway = RestauranteGateway.create(this.dataSource);
             var usecase = CadastrarItensCardapioUseCase.criar(itensCardapioGateway, restauranteGateway);
-            var itensCardapio = usecase.executar(nomeRestaurante, donoRestaurante, request);
+            var itensCardapio = usecase.executar(nomeRestaurante, donoRestaurante, request.itensCardapio());
             var itensCardapioDTO = itensCardapio.stream().map(ItensCardapioPresenter::toDTO).toList();
 
             LogUtil.fim(log, operacao, dados + itensCardapioDTO);

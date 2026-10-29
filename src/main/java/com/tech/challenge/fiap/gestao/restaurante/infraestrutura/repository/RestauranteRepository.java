@@ -25,5 +25,14 @@ public interface RestauranteRepository extends JpaRepository<RestauranteEntity, 
             """)
     Set<RestauranteEntity> findAllCustom(@Param("request") ConsultarRestauranteDTO request);
 
-    RestauranteEntity findByNomeAndDonoRestaurante_Nome(String nome, String donoRestaurante);
+    @Query("""
+            select distinct r
+            from RestauranteEntity r
+            left join fetch r.enderecoEntities e
+            left join fetch r.donoRestaurante u
+            left join fetch r.itensCardapioEntity i
+            where r.nome = :nome
+              and u.nome = :donoRestaurante
+            """)
+    RestauranteEntity findByNomeAndDonoRestaurante_Nome(@Param("nome") String nome, @Param("donoRestaurante") String donoRestaurante);
 }
