@@ -25,4 +25,8 @@ public enum TipoCozinhaEnum {
         }
         throw new IllegalArgumentException("Valor inválido para tipo de Cozinha: " + value);
     }
+
+    public String getDescricao() {
+        return descricao;
+    }
 }

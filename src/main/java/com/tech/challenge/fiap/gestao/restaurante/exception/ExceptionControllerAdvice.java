@@ -2,94 +2,15 @@ package com.tech.challenge.fiap.gestao.restaurante.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.MDC;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingRequestHeaderException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.*;
 
 @RestControllerAdvice
 public class ExceptionControllerAdvice {
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        List<FieldErrorDetail> errors = ex.getBindingResult()
-                .getFieldErrors()
-                .stream()
-                .sorted(Comparator.comparing(FieldError::getField))
-                .map(this::toFieldErrorDetail)
-                .toList();
-
-        return ResponseEntity.badRequest()
-                .body(buildError(
-                        HttpStatus.BAD_REQUEST,
-                        "Validation failed",
-                        "Um ou mais campos da requisição são inválidos.",
-                        request.getRequestURI(),
-                        errors
-                ));
-    }
-
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex, HttpServletRequest request) {
-        FieldErrorDetail errorDetail = new FieldErrorDetail(ex.getParameterName(), "Parâmetro de requisição ausente.");
-
-        return ResponseEntity.badRequest()
-                .body(buildError(
-                        HttpStatus.BAD_REQUEST,
-                        "Missing request parameter",
-                        "Um ou mais parâmetros de requisição estão ausentes.",
-                        request.getRequestURI(),
-                        List.of(errorDetail)
-                ));
-    }
-
-    @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<ErrorResponse> handleHandlerMethodValidationException(HandlerMethodValidationException ex, HttpServletRequest request) {
-        List<FieldErrorDetail> errors = ex.getParameterValidationResults().stream()
-                .flatMap(result -> result.getResolvableErrors().stream())
-                .map(violation -> new FieldErrorDetail(
-                        Objects.requireNonNull(Arrays.stream(Objects.requireNonNull(violation.getArguments()))
-                                .filter(arg -> arg instanceof org.springframework.context.support.DefaultMessageSourceResolvable)
-                                .map(arg -> ((org.springframework.context.support.DefaultMessageSourceResolvable) arg).getDefaultMessage())
-                                .findFirst()
-                                .orElse("unknown")),
-                        violation.getDefaultMessage()
-                ))
-                .toList();
-
-
-        return ResponseEntity.badRequest()
-                .body(buildError(
-                        HttpStatus.BAD_REQUEST,
-                        "Validation failed",
-                        "Um ou mais campos da requisição são inválidos.",
-                        request.getRequestURI(),
-                        errors
-                ));
-    }
-
-    @ExceptionHandler(MissingRequestHeaderException.class)
-    public ResponseEntity<ErrorResponse> handleMissingRequestHeaderException(MissingRequestHeaderException ex, HttpServletRequest request) {
-        FieldErrorDetail errorDetail = new FieldErrorDetail(ex.getHeaderName(), "Cabeçalho de requisição ausente.");
-
-        return ResponseEntity.badRequest()
-                .body(buildError(
-                        HttpStatus.BAD_REQUEST,
-                        "Missing request header",
-                        "Um ou mais cabeçalhos de requisição estão ausentes.",
-                        request.getRequestURI(),
-                        List.of(errorDetail)
-                ));
-    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
@@ -103,28 +24,42 @@ public class ExceptionControllerAdvice {
                 ));
     }
 
-    @ExceptionHandler(ObjetoNaoEncontrado.class)
-    public ResponseEntity<ErrorResponse> handleObjetoNaoEncontrado(ObjetoNaoEncontrado ex, HttpServletRequest request) {
-        FieldErrorDetail errorDetail = new FieldErrorDetail("result", ex.getMessage() != null ? ex.getMessage() : "Dado não encontrado.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, HttpServletRequest request) {
+        FieldErrorDetail errorDetail = new FieldErrorDetail("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_CONTENT)
                 .body(buildError(
-                        HttpStatus.NOT_FOUND,
-                        "Resource Not Found",
-                        "O Dado solicitado não foi encontrado.",
-                        "",
+                        HttpStatus.UNPROCESSABLE_CONTENT,
+                        "Regra de negocio",
+                        "Dados incorretos.",
+                        request.getRequestURI(),
                         List.of(errorDetail)
                 ));
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex, HttpServletRequest request) {
+    @ExceptionHandler({ItemCardapioNaoEncontradoException.class, UsuarioNaoEncontradoException.class, RestauranteNaoEncontradoException.class})
+    public ResponseEntity<ErrorResponse> handleDadosNaoEncontradoException(RuntimeException ex, HttpServletRequest request) {
+        FieldErrorDetail errorDetail = new FieldErrorDetail("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(buildError(
+                        HttpStatus.NOT_FOUND,
+                        "Regra de negocio",
+                        "Dados nao encontrados.",
+                        request.getRequestURI(),
+                        List.of(errorDetail)
+                ));
+    }
+
+    @ExceptionHandler({UsuarioEncontradoException.class, RestauranteEncontradoException.class})
+    public ResponseEntity<ErrorResponse> handleDadosEncontradoException(RuntimeException ex, HttpServletRequest request) {
+        FieldErrorDetail errorDetail = new FieldErrorDetail("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(buildError(
                         HttpStatus.CONFLICT,
-                        "Data Integrity Violation",
-                        "Não é possível realizar a operação devido a violação de integridade dos dados.",
-                        "",
-                        List.of(new FieldErrorDetail("exception", "Violação de integridade dos dados."))
+                        "Regra de negocio",
+                        "Dados encontrados.",
+                        request.getRequestURI(),
+                        List.of(errorDetail)
                 ));
     }
 
@@ -136,13 +71,6 @@ public class ExceptionControllerAdvice {
                 detail,
                 instance,
                 errors
-        );
-    }
-
-    private FieldErrorDetail toFieldErrorDetail(FieldError fieldError) {
-        return new FieldErrorDetail(
-                fieldError.getField(),
-                fieldError.getDefaultMessage()
         );
     }
 
