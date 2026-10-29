@@ -45,17 +45,23 @@ O projeto segue uma estrutura em camadas:
 Antes de iniciar a aplicação, configure as variáveis abaixo:
 
 ```bash
-export DATABASE_URL="localhost:3306/restaurante"
+export DATABASE_URL="jdbc:mysql://mysql:3306/gestao_restaurante?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
 export DATABASE_USERNAME="seu_usuario"
 export DATABASE_PASSWORD="sua_senha"
+export DATABASE_ROOT_PASSWORD="sua_senha_root"
+export MYSQL_DATABASE=gestao_restaurante
+export SPRING_PROFILES_ACTIVE=local
 ```
 
 No Windows PowerShell:
 
 ```powershell
-$env:DATABASE_URL = "localhost:3306/restaurante"
-$env:DATABASE_USERNAME = "seu_usuario"
-$env:DATABASE_PASSWORD = "sua_senha"
+$env:DATABASE_URL="jdbc:mysql://mysql:3306/gestao_restaurante?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+$env:DATABASE_USERNAME="seu_usuario"
+$env:DATABASE_PASSWORD="sua_senha"
+$env:DATABASE_ROOT_PASSWORD="sua_senha_root"
+$env:MYSQL_DATABASE=gestao_restaurante
+$env:SPRING_PROFILES_ACTIVE=local
 ```
 
 ## Executando o projeto
@@ -77,6 +83,23 @@ Com o contexto da API:
 
 ```text
 http://localhost:8080/api/v1
+```
+
+Subida de imagem mysql e projeto
+crie a pasta env e coloque no inicio do projeto
+restaurante
+|_ .env
+```text
+MYSQL_DATABASE=gestao_restaurante
+DATABASE_URL=jdbc:mysql://mysql:3306/gestao_restaurante?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+DATABASE_USERNAME=username
+DATABASE_PASSWORD=password
+DATABASE_ROOT_PASSWORD=password_root
+SPRING_PROFILES_ACTIVE=local
+```
+acessar a pasta do projeto e digitar o comando, lembrando que deve ter o docker no seu sistema
+```text
+docker compose --env-file .env up --build
 ```
 
 ## Documentação Swagger
